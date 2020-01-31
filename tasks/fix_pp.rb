@@ -1,17 +1,17 @@
 $LOAD_PATH << '..'
-require 'musikbot'
+require 'zi_jony'
 
-CATEGORY = 'Category:Wikipedia pages with incorrect protection templates'.freeze
+CATEGORY = 'বিষয়শ্রেণী:মেয়াদহীন উইকিপিডিয়ার সুরক্ষিত পাতা'.freeze
 
 module FixPP
   def self.run
-    @mb = MusikBot::Session.new(inspect)
+    @mb = ZI_Jony::Session.new(inspect)
 
     category_members.each do |page|
       page_obj = protect_info(page).first
 
       if page_obj.elements['revisions'][0].attributes['user'] == 'MusikBot'
-        log('MusikBot was last to edit page')
+        log('ZI_Jony was last to edit page')
       else
         process_page(page_obj)
       end
@@ -37,7 +37,7 @@ module FixPP
     return cache_touched(@page_obj, :set) unless @edit_summaries.present?
 
     if !protected?(@page_obj) && @mb.config[:run][:remove_all_if_expired]
-      @edit_summaries = ['Removing protection templates from unprotected page']
+      @edit_summaries = ['অসুরক্ষিত পাতা থেকে সুরক্ষা টেমপ্লেট সরানো হয়েছে।']
     end
 
     @mb.edit(@title,
